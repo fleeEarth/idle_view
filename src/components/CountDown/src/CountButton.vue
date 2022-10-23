@@ -1,6 +1,9 @@
 <template>
-  <Button v-bind="$attrs" :disabled="isStart" @click="handleStart" :loading="loading">
+  <!-- <Button v-bind="$attrs" :disabled="isStart" @click="handleStart" :loading="loading">
     {{ getButtonText }}
+  </Button> -->
+  <Button v-bind="$attrs" :disabled="isStart" :loading="loading">
+    邀请码
   </Button>
 </template>
 <script lang="ts">

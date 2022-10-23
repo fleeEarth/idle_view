@@ -5,7 +5,7 @@ import { store } from '/@/store';
 import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
-import { getAuthCache, setAuthCache } from '/@/utils/auth';
+import { getAuthCache, setAuthCache, setPublicKey, setSessionId } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
 import { doLogout, getIndexInfo, getUserInfo, loginApi } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
@@ -80,8 +80,10 @@ export const useUserStore = defineStore({
       this.sessionTimeout = false;
     },
     async getIndexInfo() {
-      await getIndexInfo()
-
+      const res = await getIndexInfo();
+      setSessionId(res.token)
+      this.setToken(res.token)
+      setPublicKey(res.publicKey)
     },
     /**
      * @description: login

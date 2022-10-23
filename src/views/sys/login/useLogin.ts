@@ -42,8 +42,9 @@ export function useFormRules(formData?: Recordable) {
   const { t } = useI18n();
 
   const getAccountFormRule = computed(() => createRule(t('sys.login.accountPlaceholder')));
+  const getNickNameFormRule = computed(() => createRule('请输入昵称'));
   const getPasswordFormRule = computed(() => createRule(t('sys.login.passwordPlaceholder')));
-  const getSmsFormRule = computed(() => createRule(t('sys.login.smsPlaceholder')));
+  const getSmsFormRule = computed(() => createRule('请输入邀请码'));
   const getMobileFormRule = computed(() => createRule(t('sys.login.mobilePlaceholder')));
 
   const validatePolicy = async (_: RuleObject, value: boolean) => {
@@ -64,19 +65,21 @@ export function useFormRules(formData?: Recordable) {
 
   const getFormRules = computed((): { [k: string]: ValidationRule | ValidationRule[] } => {
     const accountFormRule = unref(getAccountFormRule);
+    const nickNameFormRule = unref(getNickNameFormRule);
     const passwordFormRule = unref(getPasswordFormRule);
     const smsFormRule = unref(getSmsFormRule);
     const mobileFormRule = unref(getMobileFormRule);
 
     const mobileRule = {
-      sms: smsFormRule,
-      mobile: mobileFormRule,
+      code: smsFormRule,
+      phone: mobileFormRule,
     };
     switch (unref(currentState)) {
       // register form rules
       case LoginStateEnum.REGISTER:
         return {
-          account: accountFormRule,
+          username: accountFormRule,
+          nickname: nickNameFormRule,
           password: passwordFormRule,
           confirmPassword: [
             { validator: validateConfirmPassword(formData?.password), trigger: 'change' },
@@ -99,7 +102,7 @@ export function useFormRules(formData?: Recordable) {
       // login form rules
       default:
         return {
-          account: accountFormRule,
+          username: accountFormRule,
           password: passwordFormRule,
         };
     }

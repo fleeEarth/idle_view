@@ -8,10 +8,10 @@
     v-show="getShow"
     @keypress.enter="handleLogin"
   >
-    <FormItem name="account" class="enter-x">
+    <FormItem name="username" class="enter-x">
       <Input
         size="large"
-        v-model:value="formData.account"
+        v-model:value="formData.username"
         :placeholder="t('sys.login.userName')"
         class="fix-auto-fill"
       />
@@ -25,7 +25,7 @@
       />
     </FormItem>
 
-    <ARow class="enter-x">
+    <ARow v-if="false" class="enter-x">
       <ACol :span="12">
         <FormItem>
           <!-- No logic, you need to deal with it yourself -->
@@ -54,12 +54,12 @@
     </FormItem>
     <ARow class="enter-x">
       <ACol :md="8" :xs="24">
-        <Button block @click="setLoginState(LoginStateEnum.MOBILE)">
+        <Button block @click="notOpen()">
           {{ t('sys.login.mobileSignInFormTitle') }}
         </Button>
       </ACol>
       <ACol :md="8" :xs="24" class="!my-2 !md:my-0 xs:mx-0 md:mx-2">
-        <Button block @click="setLoginState(LoginStateEnum.QR_CODE)">
+        <Button block @click="notOpen()">
           {{ t('sys.login.qrSignInFormTitle') }}
         </Button>
       </ACol>
@@ -70,28 +70,13 @@
       </ACol>
     </ARow>
 
-    <Divider class="enter-x">{{ t('sys.login.otherSignIn') }}</Divider>
-
-    <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`">
-      <GithubFilled />
-      <WechatFilled />
-      <AlipayCircleFilled />
-      <GoogleCircleFilled />
-      <TwitterCircleFilled />
-    </div>
   </Form>
 </template>
 <script lang="ts" setup>
   import { reactive, ref, unref, computed } from 'vue';
 
-  import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
-  import {
-    GithubFilled,
-    WechatFilled,
-    AlipayCircleFilled,
-    GoogleCircleFilled,
-    TwitterCircleFilled,
-  } from '@ant-design/icons-vue';
+  import { Checkbox, Form, Input, Row, Col, Button } from 'ant-design-vue';
+
   import LoginFormTitle from './LoginFormTitle.vue';
 
   import { useI18n } from '/@/hooks/web/useI18n';
@@ -119,9 +104,14 @@
   const rememberMe = ref(false);
 
   const formData = reactive({
-    account: 'vben',
-    password: '123456',
+    username: '',
+    password: '',
   });
+
+  function notOpen(){
+    useMessage().createMessage.warn("暂未开放")
+    return 
+  }
 
   userStore.getIndexInfo();
 

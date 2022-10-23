@@ -1,6 +1,9 @@
 // token key
 export const TOKEN_KEY = 'TOKEN__';
-
+//session id
+export const SESSION_KEY = 'SESSION_KEY__';
+//encrypt key
+export const PUBLIC_KEY = 'PUBLIC_KEY__';
 export const LOCALE_KEY = 'LOCALE__';
 
 // user info key

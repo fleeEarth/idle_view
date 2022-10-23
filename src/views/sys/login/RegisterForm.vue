@@ -2,28 +2,36 @@
   <template v-if="getShow">
     <LoginFormTitle class="enter-x" />
     <Form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
-      <FormItem name="account" class="enter-x">
+      <FormItem name="username" class="enter-x">
         <Input
           class="fix-auto-fill"
           size="large"
-          v-model:value="formData.account"
+          v-model:value="formData.username"
           :placeholder="t('sys.login.userName')"
         />
       </FormItem>
-      <FormItem name="mobile" class="enter-x">
+      <FormItem name="nickname" class="enter-x">
+        <Input
+          class="fix-auto-fill"
+          size="large"
+          v-model:value="formData.nickname"
+          placeholder="昵称"
+        />
+      </FormItem>
+      <FormItem name="phone" class="enter-x">
         <Input
           size="large"
-          v-model:value="formData.mobile"
+          v-model:value="formData.phone"
           :placeholder="t('sys.login.mobile')"
           class="fix-auto-fill"
         />
       </FormItem>
-      <FormItem name="sms" class="enter-x">
+      <FormItem name="code" class="enter-x">
         <CountdownInput
           size="large"
           class="fix-auto-fill"
-          v-model:value="formData.sms"
-          :placeholder="t('sys.login.smsCode')"
+          v-model:value="formData.code"
+          placeholder="邀请码"
         />
       </FormItem>
       <FormItem name="password" class="enter-x">
@@ -45,7 +53,7 @@
       <FormItem class="enter-x" name="policy">
         <!-- No logic, you need to deal with it yourself -->
         <Checkbox v-model:checked="formData.policy" size="small">
-          {{ t('sys.login.policy') }}
+          我同意IDLE交易平台隐私政策
         </Checkbox>
       </FormItem>
 
@@ -73,6 +81,7 @@
   import { CountdownInput } from '/@/components/CountDown';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+  import { register } from '/@/api/sys/user';
 
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
@@ -83,11 +92,12 @@
   const loading = ref(false);
 
   const formData = reactive({
-    account: '',
+    username: '',
+    nickname: '',
     password: '',
     confirmPassword: '',
-    mobile: '',
-    sms: '',
+    phone: '',
+    code: '',
     policy: false,
   });
 
@@ -99,6 +109,14 @@
   async function handleRegister() {
     const data = await validForm();
     if (!data) return;
-    console.log(data);
+    try{
+      loading.value = true;
+      await register(data)
+      handleBackLogin()
+    }catch(e){
+      console.log(e);
+    }finally{
+      loading.value = false;
+    }
   }
 </script>
